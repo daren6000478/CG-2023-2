@@ -1,40 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
+	<meta charset="utf-8"> 
 	<title>MDN Games: Three.js demo</title>
 	<style>
-		body { margin: 0; padding: 0; font-size: 0; }
-		canvas { width: 100%; height: 100%; }
+		body { margin: 0; padding: 0; font-size: 0; } 
+		canvas { width: 100%; height: 100%; } <!-- Estilos CSS para elementos canvas. -->
 	</style>
 </head>
 <body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script> <!-- Importa la biblioteca Three.js. -->
+
 <script>
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+const scene = new THREE.Scene(); // Crea una nueva escena en Three.js.
 
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize( window.innerWidth, window.innerHeight );
-document.body.appendChild( renderer.domElement );
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000); // Crea una cámara con parámetros.
 
-const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-const cube = new THREE.Mesh( geometry, material );
-scene.add( cube );
+const renderer = new THREE.WebGLRenderer(); // Crea un renderizador WebGL.
 
-camera.position.z = 5;
+renderer.setSize(window.innerWidth, window.innerHeight); // Configura el tamaño del renderizador.
 
-function animate() {
-	requestAnimationFrame( animate );
+document.body.appendChild(renderer.domElement); // Agrega el lienzo del renderizador al cuerpo del documento.
 
-	cube.rotation.x += 0.01;
-	cube.rotation.y += 0.01;
+const geometry = new THREE.BoxGeometry(1, 1, 1); // Crea la geometría de un cubo.
 
-	renderer.render( scene, camera );
+const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 }); // Crea un material verde para el cubo.
+
+const cube = new THREE.Mesh(geometry, material); // Crea un objeto Mesh (cubo) con la geometría y el material.
+
+scene.add(cube); // Agrega el cubo a la escena.
+
+camera.position.z = 5; // Configura la posición de la cámara en el eje Z.
+
+function animate() { // Define una función para realizar la animación.
+	requestAnimationFrame(animate); // Solicita una nueva animación en el siguiente cuadro.
+
+	cube.rotation.x += 0.01; // Rota el cubo en el eje X.
+	cube.rotation.y += 0.01; // Rota el cubo en el eje Y.
+
+	renderer.render(scene, camera); // Renderiza la escena con la cámara.
 }
 
-animate();
+animate(); // Inicia la animación.
 </script>
 </body>
 </html>

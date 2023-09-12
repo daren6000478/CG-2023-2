@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Proyección 3D</title>
+    <style>
+        body { margin: 0; }
+    </style>
+</head>
+<body>
+    <script src=
+
+    <script>
+        // Paso 1: Configuración del Entorno
+        const scene = new THREE.Scene();
+        const cameraPerspectiva = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const cameraOrtogonal = new THREE.OrthographicCamera(
+            window.innerWidth / -2, window.innerWidth / 2,
+            window.innerHeight / 2, window.innerHeight / -2,
+            1, 1000
+        );
+        
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Paso 2: Creación de Objetos
+        const geometryCubo = new THREE.BoxGeometry();
+        const materialCubo = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+        const cubo = new THREE.Mesh(geometryCubo, materialCubo);
+
+        const geometryEsfera = new THREE.SphereGeometry();
+        const materialEsfera = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+        const esfera = new THREE.Mesh(geometryEsfera, materialEsfera);
+
+        // Paso 3: Posicionamiento y Orientación
+        cubo.position.x = -2;
+        esfera.position.x = 2;

@@ -47,3 +47,35 @@ function createBackrest() {
     return backrest;
 }
 
+// Crear las cuatro patas
+const frontLeftLeg = createLeg(-chairWidth / 2 + legWidth / 2, -chairWidth / 2 + legWidth / 2);
+const frontRightLeg = createLeg(-chairWidth / 2 + legWidth / 2, chairWidth / 2 - legWidth / 2);
+const backLeftLeg = createLeg(chairWidth / 2 - legWidth / 2, -chairWidth / 2 + legWidth / 2);
+const backRightLeg = createLeg(chairWidth / 2 - legWidth / 2, chairWidth / 2 - legWidth / 2);
+
+// Crear el asiento
+const seat = createSeat();
+
+// Crear el respaldo y unirlo al asiento
+const backrest = createBackrest();
+
+// Agregar todos los elementos a la escena
+scene.add(frontLeftLeg);
+scene.add(frontRightLeg);
+scene.add(backLeftLeg);
+scene.add(backRightLeg);
+scene.add(seat);
+scene.add(backrest);
+
+// Agregar una luz para mejorar la visibilidad
+const light = new THREE.PointLight(0xffffff);
+light.position.set(2, 3, 4);
+scene.add(light);
+
+// Animación y renderizado
+function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+}
+
+animate();

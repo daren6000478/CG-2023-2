@@ -1,13 +1,62 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Escena Interactiva con Three.js</title>
-</head>
-<body>
-    <div id="canvas-container"></div>
-    <button onclick="startInteractiveScene()">Iniciar Escena</button>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="js/ejerciciocono.js"></script>
-</body>
+<html>
+  <head>
+    <title>Cono en Three.js</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+  </head>
+  <body>
+    <script>
+      // Paso 2: Crear una Escena, Cámara y Renderizador
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      // Paso 3: Crear una Geometría Personalizada (Cono)
+      const geometry = new THREE.Geometry();
+
+      const radius = 1; // Radio de la base del cono
+      const height = 2; // Altura del cono
+      const segments = 16; // Número de segmentos del cono
+
+      for (let i = 0; i <= segments; i++) {
+        const theta = (i / segments) * Math.PI * 2;
+        const x = radius * Math.cos(theta);
+        const z = radius * Math.sin(theta);
+
+        geometry.vertices.push(new THREE.Vector3(x, 0, z)); // Vértices de la base del cono
+      }
+
+      const tip = new THREE.Vector3(0, height, 0);
+      geometry.vertices.push(tip); // Vértice de la punta del cono
+
+      for (let i = 0; i < segments; i++) {
+        geometry.faces.push(new THREE.Face3(i, (i + 1) % segments, segments)); // Caras de la base
+        geometry.faces.push(new THREE.Face3(i, (i + 1) % segments, segments + 1)); // Caras laterales
+      }
+
+      geometry.computeFaceNormals(); // Calcular las normales de las caras
+
+      // Paso 5: Crear una Malla (Objeto 3D)
+      const customMesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true }));
+      scene.add(customMesh);
+
+      // Paso 6: Configurar la Cámara y Renderizar
+      camera.position.z = 5;
+
+      function animate() {
+        requestAnimationFrame(animate);
+
+        // Agrega controles para rotar el cono
+        customMesh.rotation.x += 0.01;
+        customMesh.rotation.y += 0.01;
+
+        renderer.render(scene, camera);
+      }
+
+      animate();
+    </script>
+  </body>
 </html>
+

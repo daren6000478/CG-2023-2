@@ -1,5 +1,5 @@
-/ Variables globales
-let scene, camera, renderer, cone, controls;
+// Variables globales
+let scene, camera, renderer, cone;
 
 function init() {
     // Crear una escena
@@ -15,29 +15,27 @@ function init() {
     document.getElementById('canvas-container').appendChild(renderer.domElement);
 
     // Crear una geometría personalizada (cono)
-    createCustomCone();
+    createCustomConeGeometry();
 
     // Agregar iluminación
     const light = new THREE.DirectionalLight(0xffffff, 1);
     light.position.set(1, 1, 1);
     scene.add(light);
-
-    // Iniciar controles para el usuario
-    controls = new THREE.OrbitControls(camera, renderer.domElement);
 }
 
-function createCustomCone() {
+function createCustomConeGeometry() {
     // Crear una geometría personalizada (cono)
     const geometry = new THREE.Geometry();
     const radius = 2;
     const height = 5;
-    const segments = 20;
+    const radialSegments = 20;
+    const twoPi = 2 * Math.PI;
 
-    for (let i = 0; i <= segments; i++) {
-        const theta = (i / segments) * Math.PI * 2;
+    for (let i = 0; i <= radialSegments; i++) {
+        const theta = (i / radialSegments) * twoPi;
         const x = radius * Math.cos(theta);
         const z = radius * Math.sin(theta);
-        const y = (i / segments) * height;
+        const y = (i / radialSegments) * height;
 
         geometry.vertices.push(new THREE.Vector3(x, y, z));
     }
@@ -63,9 +61,8 @@ function animate() {
     requestAnimationFrame(animate);
 
     // Rotación interactiva del cono
-    if (controls) {
-        controls.update();
-    }
+    cone.rotation.x += 0.01;
+    cone.rotation.y += 0.01;
 
     renderer.render(scene, camera);
 }

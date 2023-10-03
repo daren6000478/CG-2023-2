@@ -1,0 +1,31 @@
+1. ¿Qué pasa si cambia la curva por una línea recta? ¿Cómo se verá el tubo en este caso?
+Si cambia la curva a una línea recta, la tubería parecerá un cilindro recto en lugar de tener una forma curva.
+Esto significa que el tubo no se doblará y formará una línea recta de un extremo al otro.
+
+Pregunta 2: ¿Qué sucede si ajusta el grosor del tubo o cambia el material utilizado para renderizarlo?
+Si ajusta el grosor del tubo, el diámetro del tubo en la visualización cambiará. Un espesor mayor hará que el tubo sea más ancho, mientras que un espesor menor hará que el tubo sea más delgado.
+Al cambiar el material utilizado para fabricar el tubo, se puede cambiar su apariencia visual.
+Por ejemplo, puedes utilizar texturas texturizadas o aplicar un efecto de sombra para que parezca más realista o estilizado.
+
+Pregunta 3: ¿Puede añadir iluminación y sombreado para mejorar la visualización del tubo?
+Sí, puedes agregar luces y sombras para mejorar la apariencia del tubo.
+Esto ayudará a resaltar los detalles y hacerlos parecer más realistas. Puedes utilizar luces ambientales, luces direccionales o focos para iluminar el tubo desde diferentes ángulos.
+Además, puede aplicar técnicas de sombreado, como el sombreado suave o el sombreado Phong, para mejorar la apariencia de la superficie del tubo y crear efectos de luces y sombras más realistas.
+A continuación se muestra un ejemplo de cómo agregar luces y sombras al código existente:
+// Paso 4: Añadir iluminación
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+scene.add(ambientLight);
+
+const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+directionalLight.position.set(1, 1, 1);
+scene.add(directionalLight);
+
+// Paso 5: Crear un material con sombreado
+const material = new THREE.MeshPhongMaterial({ color: 0x00ff00 });
+
+// Paso 6: Crear una Malla (Objeto 3D) con el nuevo material
+const customMesh = new THREE.Mesh(tubeGeometry, material);
+scene.add(customMesh);
+Este ejemplo agrega luz ambiental y direccional para iluminar el tubo desde diferentes ángulos.
+Además, se utilizó el material de sombra Phong para crear un efecto de iluminación y sombra más realista en el tubo.
+Recuerda que puedes ajustar los parámetros de luces y sombras a tus necesidades y preferencias para conseguir el efecto visual deseado.

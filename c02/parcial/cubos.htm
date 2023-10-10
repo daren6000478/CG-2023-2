@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Three.js Cubos</title>
+    <style>
+      body {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="https://threejs.org/build/three.js"></script>
+    <script>
+      var scene = new THREE.Scene();
+      var camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+
+      var renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      function createCube(x, y, z, size) {
+        var geometry = new THREE.Geometry();
+
+        geometry.vertices.push(
+          new THREE.Vector3(-size / 2, -size / 2, -size / 2),
+          new THREE.Vector3(size / 2, -size / 2, -size / 2),
+          new THREE.Vector3(size / 2, size / 2, -size / 2),
+          new THREE.Vector3(-size / 2, size / 2, -size / 2),
+          new THREE.Vector3(-size / 2, -size / 2, size / 2),
+          new THREE.Vector3(size / 2, -size / 2, size / 2),
+          new THREE.Vector3(size / 2, size / 2, size / 2),
+          new THREE.Vector3(-size / 2, size / 2, size / 2)
+
+</html>
+

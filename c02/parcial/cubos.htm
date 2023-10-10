@@ -25,7 +25,8 @@
       document.body.appendChild(renderer.domElement);
 
       var textureLoader = new THREE.TextureLoader();
-      var texture = textureLoader.load('C:\\Users\\Estudiante\\Desktop\\parcial\\textura.PNG'); // Asegúrate de que 'textura.PNG' esté en el mismo directorio que tu archivo HTML
+      var texture = textureLoader.load('https://plus.unsplash.com/premium_photo-1674575954741-0f610c5dc2c0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+
 
       function createCube(x, y, z, scaleX, scaleY, scaleZ) {
         var geometry = new THREE.Geometry();
@@ -57,3 +58,26 @@
         );
         geometry.computeFaceNormals();
 
+        var material = new THREE.MeshBasicMaterial({ map: texture }); // Asigna la textura
+        var cube = new THREE.Mesh(geometry, material);
+        cube.position.set(x, y, z);
+        scene.add(cube);
+      }
+
+      createCube(0, 0, 0, 1, 1, 1); // Primer cubo
+      createCube(0, 0.5, 0, 0.75, 1, 0.75); // Segundo cubo (estirado)
+      createCube(0, 1, 0, 0.4, 0.6, 0.4); // Tercer cubo (más pequeño y estirado hacia arriba)
+
+      // Configura la posición de la cámara para ver los cubos desde la esquina
+      camera.position.set(2, 1, 2);
+      camera.lookAt(0, 0, 0);
+
+      var animate = function () {
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+      };
+
+      animate();
+    </script>
+  </body>
+</html>

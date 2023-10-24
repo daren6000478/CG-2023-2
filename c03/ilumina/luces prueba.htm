@@ -1,128 +1,107 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <meta charset="utf-8">
-    <title>Objeto 3D con Luces en Three.js</title>
-    <style>
-        #canvas-container {
-            position: relative;
-        }
-
-        #controls {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background-color: rgba(255, 255, 255, 0.7);
-            padding: 10px;
-        }
-    </style>
-</head>
-<body>
-    <div id="canvas-container"></div>
-    <div id="controls">
-        <h3>Controles de Luces</h3>
-        <label for="lightX">Luz X:</label>
-        <input type="checkbox" id="lightX" checked><br>
-        <label for="lightY">Luz Y:</label>
-        <input type="checkbox" id="lightY" checked><br>
-        <label for="lightZ">Luz Z:</label>
-        <input type="checkbox" id="lightZ" checked><br>
-    </div>
+    <title>Objetos 3D en Three.js</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.7/dat.gui.min.js"></script>
+  </head>
+  <body>
+    <div id="canvas-container"></div>
     <script>
-        // Variables globales
-        let scene, camera, renderer, dodecahedron, directionalLightX, directionalLightY, directionalLightZ;
+      // Variables globales
+      let scene, camera, renderer;
+      let lights = {
+        ambientLight: true,
+        directionalLight: true,
+        arribaLight: true
+      };
 
-        // Función para crear ejes de coordenadas infinitos
-        function createInfiniteAxes(length) {
-            const axes = new THREE.AxesHelper(length);
-            // Asegurarse de que los ejes sean infinitos
-            axes.material.linewidth = 2;
-            axes.geometry.attributes.position.needsUpdate = true;
-            return axes;
+      // Luces
+      let ambientLight, directionalLight, arribaLight;
+
+      // Figuras 3D
+      let objects = [];
+
+      // Interfaz de usuario
+      const gui = new dat.GUI();
+
+      // Función para actualizar el estado de las luces
+      function updateLights() {
+        ambientLight.visible = lights.ambientLight;
+        directionalLight.visible = lights.directionalLight;
+        arribaLight.visible = lights.arribaLight;
+      }
+
+      // Configurar la escena
+      function init() {
+        // Escena
+        scene = new THREE.Scene();
+
+        // Cámara
+        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 5;
+
+        // Renderizador
+        renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById("canvas-container").appendChild(renderer.domElement);
+
+        // Crear figuras 3D (diferentes geometrías y materiales)
+        const geometries = [
+          new THREE.BoxGeometry(1, 1, 1),
+          new THREE.SphereGeometry(0.7, 32, 32),
+          new THREE.CylinderGeometry(0.5, 0.5, 1, 32),
+          new THREE.TorusGeometry(0.5, 0.2, 32, 64),
+          new THREE.TorusKnotGeometry(0.5, 0.2, 64, 8),
+          new THREE.IcosahedronGeometry(0.8, 0),
+        ];
+
+        for (let i = 0; i < 6; i++) {
+          const material = new THREE.MeshPhongMaterial({ color: Math.random() * 0xffffff });
+          const object = new THREE.Mesh(geometries[i], material);
+          object.position.x = (i - 2) * 2;
+          objects.push(object);
+          scene.add(object);
         }
 
-        // Configurar la escena
-        function init() {
-            // Escena
-            scene = new THREE.Scene();
+        // Luces
+        ambientLight = new THREE.AmbientLight(0x404040); // Luz ambiental
+        scene.add(ambientLight);
 
-            // Cámara
-            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.z = 5;
+        directionalLight = new THREE.DirectionalLight(0xffffff);
+        directionalLight.position.set(-1, 1, 1); // Posición en la esquina superior izquierda
+        scene.add(directionalLight);
 
-            // Renderizador
-            renderer = new THREE.WebGLRenderer();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            document.getElementById("canvas-container").appendChild(renderer.domElement);
+        arribaLight = new THREE.PointLight(0xffffff);
+        arribaLight.position.set(0, 2, 0); // Posición arriba
+        scene.add(arribaLight);
 
-            // Luz puntual
-            const light = new THREE.PointLight(0xffffff);
-            light.position.set(2, 2, 2);
-            scene.add(light);
+        // Añadir controles de luces a la interfaz
+        gui.add(lights, 'ambientLight').name('Luz Ambiental').onChange(updateLights);
+        gui.add(lights, 'directionalLight').name('Luz Direccional').onChange(updateLights);
+        gui.add(lights, 'arribaLight').name('Luz Arriba').onChange(updateLights);
+      }
 
-            // Luz direccional en el eje Y
-            directionalLightY = new THREE.DirectionalLight(0xffffff, 0.5);
-            directionalLightY.position.set(0, 1, 0);
-            scene.add(directionalLightY);
+      // Animación
+      function animate() {
+        requestAnimationFrame(animate);
 
-            // Luz direccional en el eje Z
-            directionalLightZ = new THREE.DirectionalLight(0xffffff, 0.5);
-            directionalLightZ.position.set(0, 0, 1);
-            scene.add(directionalLightZ);
-
-            // Objeto 3D (dodecaedro amarillo)
-            const geometry = new THREE.DodecahedronGeometry(1);
-            const material = new THREE.MeshPhongMaterial({ color: 0xffff00, flatShading: true });
-            dodecahedron = new THREE.Mesh(geometry, material);
-            scene.add(dodecahedron);
-
-            // Agregar ejes de coordenadas infinitos a las luces
-            const axesX = createInfiniteAxes(5);
-            const axesY = createInfiniteAxes(5);
-            const axesZ = createInfiniteAxes(5);
-            directionalLightX = createInfiniteAxes(5);
-
-            directionalLightX.rotation.x = Math.PI / 2;
-            axesY.rotation.x = Math.PI / 2;
-            axesZ.rotation.x = Math.PI / 2;
-
-            scene.add(axesX);
-            scene.add(directionalLightX);
-            scene.add(axesY);
-            scene.add(axesZ);
+        // Rotar todas las figuras
+        for (const object of objects) {
+          object.rotation.x += 0.01;
+          object.rotation.y += 0.01;
         }
 
-        // Función para cambiar la intensidad de las luces y ajustar el material del objeto
-        function toggleLights() {
-            const lightXChecked = document.getElementById("lightX").checked;
-            const lightYChecked = document.getElementById("lightY").checked;
-            const lightZChecked = document.getElementById("lightZ").checked;
+        renderer.render(scene, camera);
+      }
 
-            directionalLightX.intensity = lightXChecked ? 0.5 : 0;
-            directionalLightY.intensity = lightYChecked ? 0.5 : 0;
-            directionalLightZ.intensity = lightZChecked ? 0.5 : 0;
-
-            // Cambiar el material del objeto en función del estado de las luces
-            if (lightXChecked || lightYChecked || lightZChecked) {
-                dodecahedron.material = new THREE.MeshPhongMaterial({ color: 0xffff00, flatShading: true });
-            } else {
-                dodecahedron.material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
-            }
-        }
-
-        // Animación
-        function animate() {
-            requestAnimationFrame(animate);
-            dodecahedron.rotation.x += 0.01;
-            dodecahedron.rotation.y += 0.01;
-            renderer.render(scene, camera);
-        }
-
-        // Inicializar y comenzar la animación
-        init();
-        animate();
+      // Inicializar y comenzar la animación
+      init();
+      updateLights(); // Actualizar el estado inicial de las luces
+      animate();
     </script>
-</body>
+  </body>
 </html>
+
 
